@@ -26,7 +26,19 @@ form.addEventListener("submit", (event) => {
   event.preventDefault();
 
   const text = input.value.trim();
-  if (!text) return;
+  const error = document.querySelector("#task-error");
+
+  if (!text) {
+    error.textContent = "Please enter a task.";
+    return;
+  }
+
+  if (tasks.includes(text)) {
+    error.textContent = "That task is already on the list.";
+    return;
+  }
+
+  error.textContent = "";
 
   tasks.push(text);
   input.value = "";
