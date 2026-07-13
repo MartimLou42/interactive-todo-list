@@ -2,11 +2,11 @@
 
 Week 4 DOM assignment for the Step8Up Software Bootcamp.
 
-## Current progress
+## Progress
 
-- [x] Add tasks with the button or Enter key
-- [x] Display tasks dynamically
-- [x] Reject empty tasks with visible feedback
+- [ ] Add tasks with the button or Enter key
+- [ ] Display tasks dynamically
+- [ ] Reject empty tasks with visible feedback
 - [ ] Delete tasks
 - [ ] Prevent duplicate tasks
 - [ ] Edit and save tasks
