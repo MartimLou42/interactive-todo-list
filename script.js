@@ -6,9 +6,18 @@ let tasks = [];
 
 function render() {
   list.innerHTML = "";
-  tasks.forEach((task) => {
+  tasks.forEach((task, index) => {
     const item = document.createElement("li");
     item.textContent = task;
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.addEventListener("click", () => {
+      tasks.splice(index, 1);
+      render();
+    });
+
+    item.appendChild(deleteButton);
     list.appendChild(item);
   });
 }
