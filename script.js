@@ -3,21 +3,50 @@ const input = document.querySelector("#task-input");
 const list = document.querySelector("#task-list");
 
 let tasks = [];
+let editingIndex = null;
 
 function render() {
   list.innerHTML = "";
   tasks.forEach((task, index) => {
     const item = document.createElement("li");
-    item.textContent = task;
 
-    const deleteButton = document.createElement("button");
-    deleteButton.textContent = "Delete";
-    deleteButton.addEventListener("click", () => {
-      tasks.splice(index, 1);
-      render();
-    });
+    if (index === editingIndex) {
+      const editInput = document.createElement("input");
+      editInput.type = "text";
+      editInput.value = task;
 
-    item.appendChild(deleteButton);
+      const saveButton = document.createElement("button");
+      saveButton.textContent = "Save";
+      saveButton.addEventListener("click", () => {
+        const newText = editInput.value.trim();
+        if (newText) tasks[index] = newText;
+        editingIndex = null;
+        render();
+      });
+
+      item.appendChild(editInput);
+      item.appendChild(saveButton);
+    } else {
+      item.textContent = task;
+
+      const editButton = document.createElement("button");
+      editButton.textContent = "Edit";
+      editButton.addEventListener("click", () => {
+        editingIndex = index;
+        render();
+      });
+
+      const deleteButton = document.createElement("button");
+      deleteButton.textContent = "Delete";
+      deleteButton.addEventListener("click", () => {
+        tasks.splice(index, 1);
+        render();
+      });
+
+      item.appendChild(editButton);
+      item.appendChild(deleteButton);
+    }
+
     list.appendChild(item);
   });
 }
