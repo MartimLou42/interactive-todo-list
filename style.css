@@ -3,6 +3,8 @@
   --ink: #17233a;
   --rule: #b8c3c9;
   --accent: #d84332;
+  --content-left: clamp(64px, 13vw, 200px);
+  --content-right: clamp(24px, 8vw, 96px);
 }
 
 * {
@@ -25,16 +27,19 @@ body::before {
   left: clamp(32px, 10vw, 160px);
   width: 2px;
   background: var(--accent);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .todo-app {
   width: 100%;
-  padding: clamp(48px, 8vw, 96px) clamp(24px, 8vw, 96px) 80px;
-  padding-left: clamp(64px, 13vw, 200px);
+  padding: clamp(48px, 8vw, 96px) var(--content-right) 80px var(--content-left);
 }
 
 .app-header {
-  padding-bottom: 36px;
+  margin-right: calc(0px - var(--content-right));
+  margin-left: calc(0px - var(--content-left));
+  padding: 0 var(--content-right) 36px var(--content-left);
   border-bottom: 1px solid var(--rule);
 }
 
@@ -56,7 +61,9 @@ h1 {
 }
 
 #task-form {
-  padding: 32px 0 18px;
+  margin-right: calc(0px - var(--content-right));
+  margin-left: calc(0px - var(--content-left));
+  padding: 32px var(--content-right) 18px var(--content-left);
   border-bottom: 1px solid var(--rule);
 }
 
@@ -122,4 +129,106 @@ h1 {
   margin: 12px 0 0;
   color: var(--accent);
   font-size: 0.9rem;
+}
+
+#task-list {
+  min-height: 50vh;
+  margin: 48px calc(0px - var(--content-right)) 0
+    calc(0px - var(--content-left));
+  padding: 0 var(--content-right) 0 var(--content-left);
+  border-top: 1px solid var(--rule);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 47px,
+    var(--rule) 47px,
+    var(--rule) 48px
+  );
+  list-style: none;
+}
+
+#task-list li {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  gap: 24px;
+  align-items: start;
+  min-height: 96px;
+  padding: 16px 0;
+  font-size: 1rem;
+}
+
+#task-list li::before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ink);
+}
+
+.task-text {
+  overflow-wrap: anywhere;
+}
+
+.task-actions {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+#task-list button {
+  padding: 8px 4px;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+#task-list button:hover,
+#task-list button:focus-visible {
+  color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+#task-list input {
+  width: 100%;
+  padding: 8px 10px;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  font: inherit;
+}
+
+#task-list input:focus {
+  border-color: var(--accent);
+  outline: 1px solid var(--accent);
+}
+
+.save-button {
+  color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  #task-list li {
+    grid-template-columns: 18px minmax(0, 1fr);
+    gap: 12px;
+    min-height: 144px;
+  }
+
+  #task-list li::before {
+    width: 16px;
+    height: 16px;
+  }
+
+  .task-actions {
+    grid-column: 2;
+    gap: 20px;
+  }
+
+  #task-list input {
+    grid-column: 2;
+  }
 }
