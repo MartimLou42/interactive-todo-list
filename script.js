@@ -7,78 +7,102 @@ const error = document.querySelector("#task-error");
 let tasks = [];
 let editingIndex = null;
 
-function render() {
+function showError(message) {
+  error.textContent = message;
+}
+
+function isTaskValid(text, originalText) {
+  if (!text) {
+    showError("Please enter a task.");
+    return false;
+  }
+
+  if (text !== originalText && tasks.includes(text)) {
+    showError("That task is already on the list.");
+    return false;
+  }
+
+  showError("");
+  return true;
+}
+
+function createButton(text) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = text;
+  return button;
+}
+
+function startEditing(index) {
+  editingIndex = index;
+  renderTasks();
+}
+
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  renderTasks();
+}
+
+function saveTask(index, editInput) {
+  const newText = editInput.value.trim();
+  const originalText = tasks[index];
+
+  if (!isTaskValid(newText, originalText)) {
+    editInput.focus();
+    return;
+  }
+
+  tasks[index] = newText;
+  editingIndex = null;
+  renderTasks();
+}
+
+function createTaskItem(task, index) {
+  const item = document.createElement("li");
+  const actions = document.createElement("div");
+  actions.className = "task-actions";
+
+  if (index === editingIndex) {
+    const editInput = document.createElement("input");
+    editInput.type = "text";
+    editInput.value = task;
+
+    const saveButton = createButton("Save");
+    saveButton.className = "save-button";
+    saveButton.addEventListener("click", () => {
+      saveTask(index, editInput);
+    });
+
+    item.append(editInput);
+    actions.append(saveButton);
+  } else {
+    const taskText = document.createElement("span");
+    taskText.className = "task-text";
+    taskText.textContent = task;
+
+    const editButton = createButton("Edit");
+    editButton.addEventListener("click", () => {
+      startEditing(index);
+    });
+
+    const deleteButton = createButton("Delete");
+    deleteButton.addEventListener("click", () => {
+      deleteTask(index);
+    });
+
+    item.append(taskText);
+    actions.append(editButton, deleteButton);
+  }
+
+  item.append(actions);
+  return item;
+}
+
+function renderTasks() {
   list.innerHTML = "";
+
   tasks.forEach((task, index) => {
-    const item = document.createElement("li");
-    const actions = document.createElement("div");
-    actions.className = "task-actions";
-
-    if (index === editingIndex) {
-      const editInput = document.createElement("input");
-      editInput.type = "text";
-      editInput.value = task;
-
-      const saveButton = document.createElement("button");
-      saveButton.type = "button";
-      saveButton.className = "save-button";
-      saveButton.textContent = "Save";
-      saveButton.addEventListener("click", () => {
-        const newText = editInput.value.trim();
-
-        if (!newText) {
-          error.textContent = "Please enter a task.";
-          editInput.focus();
-          return;
-        }
-
-        const isDuplicate = tasks.some(
-          (existingTask, taskIndex) =>
-            taskIndex !== index && existingTask === newText,
-        );
-
-        if (isDuplicate) {
-          error.textContent = "That task is already on the list.";
-          editInput.focus();
-          return;
-        }
-
-        tasks[index] = newText;
-        error.textContent = "";
-        editingIndex = null;
-        render();
-      });
-
-      item.appendChild(editInput);
-      actions.appendChild(saveButton);
-    } else {
-      const taskText = document.createElement("span");
-      taskText.className = "task-text";
-      taskText.textContent = task;
-
-      const editButton = document.createElement("button");
-      editButton.type = "button";
-      editButton.textContent = "Edit";
-      editButton.addEventListener("click", () => {
-        editingIndex = index;
-        render();
-      });
-
-      const deleteButton = document.createElement("button");
-      deleteButton.type = "button";
-      deleteButton.textContent = "Delete";
-      deleteButton.addEventListener("click", () => {
-        tasks.splice(index, 1);
-        render();
-      });
-
-      item.appendChild(taskText);
-      actions.appendChild(editButton);
-      actions.appendChild(deleteButton);
-    }
-
-    item.appendChild(actions);
-    list.appendChild(item);
+    list.append(createTaskItem(task, index));
   });
 
   count.textContent = String(tasks.length).padStart(2, "0");
@@ -89,20 +113,12 @@ form.addEventListener("submit", (event) => {
 
   const text = input.value.trim();
 
-  if (!text) {
-    error.textContent = "Please enter a task.";
+  if (!isTaskValid(text, "")) {
     return;
   }
-
-  if (tasks.includes(text)) {
-    error.textContent = "That task is already on the list.";
-    return;
-  }
-
-  error.textContent = "";
 
   tasks.push(text);
   input.value = "";
   input.focus();
-  render();
+  renderTasks();
 });
