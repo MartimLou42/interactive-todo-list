@@ -1,25 +1,36 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Interactive TODO List</title>
-    <script src="script.js" defer></script>
-  </head>
-  <body>
-    <h1>Things to do</h1>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive TODO List</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <main class="todo-app">
+    <header class="app-header">
+      <h1>Today’s list</h1>
+      <p class="task-summary">
+        Open items / <span id="task-count" aria-live="polite">00</span>
+      </p>
+    </header>
 
     <form id="task-form">
-      <input
-        id="task-input"
-        type="text"
-        placeholder="What needs doing?"
-        autocomplete="off"
-      />
-      <button type="submit">Add task</button>
+      <label for="task-input">New task</label>
+
+      <div class="task-entry">
+        <input id="task-input" type="text" placeholder="Type a task..." autocomplete="off" />
+        <button class="add-button" type="submit">Add</button>
+      </div>
+
       <p id="task-error" role="alert"></p>
     </form>
 
     <ul id="task-list"></ul>
-  </body>
+  </main>
+</body>
+
 </html>
