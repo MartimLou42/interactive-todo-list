@@ -5,9 +5,7 @@
   --accent: #d84332;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   min-height: 100vh;
@@ -29,24 +27,15 @@ body::before {
   pointer-events: none;
 }
 
-.todo-app {
-  width: 100%;
-  padding-bottom: 80px;
-}
+main { padding-bottom: 80px; }
 
-.content {
-  padding-right: clamp(24px, 8vw, 96px);
-  padding-left: clamp(64px, 13vw, 200px);
-}
-
-.app-header {
-  padding-top: clamp(48px, 8vw, 96px);
+.content { padding-inline: clamp(64px, 13vw, 200px) clamp(24px, 8vw, 96px); }
+.app-header { padding-top: clamp(48px, 8vw, 96px); }
+.app-header,
+.task-form-section {
   border-bottom: 1px solid var(--rule);
 }
-
-.app-header .content {
-  padding-bottom: 36px;
-}
+.app-header .content { padding-bottom: 36px; }
 
 h1 {
   margin: 0;
@@ -65,22 +54,12 @@ h1 {
   text-transform: uppercase;
 }
 
-.task-form-section {
-  border-bottom: 1px solid var(--rule);
-}
-
-#task-form {
-  padding-top: 32px;
-  padding-bottom: 18px;
-}
-
+#task-form { padding-block: 32px 18px; }
 #task-form label {
   display: block;
   margin-bottom: 18px;
   font-size: 0.9rem;
-  font-weight: bold;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .task-entry {
@@ -90,16 +69,27 @@ h1 {
   align-items: end;
 }
 
+input,
+button {
+  color: inherit;
+  background: transparent;
+  border-radius: 0;
+  font: inherit;
+}
+button { cursor: pointer; }
+#task-form label,
+.add-button,
+#task-list button {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
 #task-input {
   width: 100%;
   padding: 10px 0;
-  color: var(--ink);
-  background: transparent;
   border: 0;
   border-bottom: 2px solid var(--ink);
-  border-radius: 0;
   outline: none;
-  font: inherit;
   font-size: 1.15rem;
 }
 
@@ -107,21 +97,11 @@ h1 {
   color: var(--ink);
   opacity: 0.55;
 }
-
-#task-input:focus {
-  border-bottom-color: var(--accent);
-}
-
+#task-input:focus { border-bottom-color: var(--accent); }
 .add-button {
   padding: 10px 14px;
   color: var(--accent);
-  background: transparent;
   border: 2px solid var(--accent);
-  border-radius: 0;
-  font: inherit;
-  font-weight: bold;
-  text-transform: uppercase;
-  cursor: pointer;
 }
 
 .add-button:hover,
@@ -153,8 +133,7 @@ h1 {
 
 #task-list {
   margin: 0;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding-block: 0;
   list-style: none;
 }
 
@@ -174,11 +153,7 @@ h1 {
   height: 18px;
   border: 2px solid var(--ink);
 }
-
-.task-text {
-  overflow-wrap: anywhere;
-}
-
+.task-text { overflow-wrap: anywhere; }
 .task-actions {
   display: flex;
   gap: 24px;
@@ -187,15 +162,8 @@ h1 {
 
 #task-list button {
   padding: 8px 4px;
-  color: var(--ink);
-  background: transparent;
   border: 0;
-  font: inherit;
-  font-weight: bold;
-  text-transform: uppercase;
-  cursor: pointer;
 }
-
 #task-list button:hover,
 #task-list button:focus-visible {
   color: var(--accent);
@@ -206,21 +174,14 @@ h1 {
 #task-list input {
   width: 100%;
   padding: 8px 10px;
-  color: var(--ink);
-  background: transparent;
   border: 1px solid var(--ink);
-  border-radius: 0;
-  font: inherit;
 }
-
 #task-list input:focus {
   border-color: var(--accent);
   outline: 1px solid var(--accent);
 }
 
-.save-button {
-  color: var(--accent);
-}
+.save-button { color: var(--accent); }
 
 @media (max-width: 600px) {
   #task-list li {
@@ -228,18 +189,13 @@ h1 {
     gap: 12px;
     min-height: 144px;
   }
-
   #task-list li::before {
     width: 16px;
     height: 16px;
   }
-
   .task-actions {
     grid-column: 2;
     gap: 20px;
   }
-
-  #task-list input {
-    grid-column: 2;
-  }
+  #task-list input { grid-column: 2; }
 }
