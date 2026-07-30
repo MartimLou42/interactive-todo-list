@@ -1,6 +1,6 @@
 # Interactive TODO List
 
-Week 4 DOM assignment for the Step8Up Software Bootcamp.
+Week 4 DOM assignment for the Step8Up Bootcamp, went super overboard on this.
 
 ## Progress
 
@@ -12,6 +12,6 @@ Week 4 DOM assignment for the Step8Up Software Bootcamp.
 - Edit and save tasks
 - Deploy with GitHub Pages
 
-## Run locally
+## Github Page
 
-Open `index.html` in a browser.
+https://martimlou42.github.io/interactive-todo-list/
