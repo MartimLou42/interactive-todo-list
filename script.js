@@ -11,7 +11,7 @@ function isTaskValid(text, originalText = "") {
   let message = "";
   if (!text) {
     message = "Please enter a task.";
-  } else if (text !== originalText && tasks.includes(text)) {
+  } else if (text !== originalText && tasks.some((task) => task.text === text)) {
     message = "That task is already on the list.";
   }
 
@@ -31,17 +31,38 @@ function createTaskItem(task, index) {
   const item = document.createElement("li");
   const actions = document.createElement("div");
   actions.className = "task-actions";
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.className = "task-checkbox";
+  checkbox.checked = task.completed;
+
+  const checkboxAction = task.completed ? "incomplete" : "complete";
+  checkbox.setAttribute("aria-label", `Mark ${task.text} as ${checkboxAction}`);
+  checkbox.addEventListener("change", () => {
+    task.completed = checkbox.checked;
+    const taskText = item.querySelector(".task-text");
+    if (taskText) {
+      taskText.classList.toggle("completed", task.completed);
+    }
+
+    const nextAction = task.completed ? "incomplete" : "complete";
+    checkbox.setAttribute("aria-label", `Mark ${task.text} as ${nextAction}`);
+    updateCount();
+  });
+
   if (index === editingIndex) {
     const editInput = document.createElement("input");
     editInput.type = "text";
-    editInput.value = task;
+    editInput.className = "edit-input";
+    editInput.value = task.text;
     const saveButton = createButton("Save", () => {
       const newText = editInput.value.trim();
-      if (!isTaskValid(newText, task)) {
+      if (!isTaskValid(newText, task.text)) {
         editInput.focus();
         return;
       }
-      tasks[index] = newText;
+      task.text = newText;
       editingIndex = null;
       renderTasks();
     });
@@ -50,8 +71,8 @@ function createTaskItem(task, index) {
     actions.append(saveButton);
   } else {
     const taskText = document.createElement("span");
-    taskText.className = "task-text";
-    taskText.textContent = task;
+    taskText.className = task.completed ? "task-text completed" : "task-text";
+    taskText.textContent = task.text;
     const editButton = createButton("Edit", () => {
       editingIndex = index;
       renderTasks();
@@ -63,6 +84,7 @@ function createTaskItem(task, index) {
     item.append(taskText);
     actions.append(editButton, deleteButton);
   }
+  item.prepend(checkbox);
   item.append(actions);
   return item;
 }
@@ -72,7 +94,12 @@ function renderTasks() {
   tasks.forEach((task, index) => {
     list.append(createTaskItem(task, index));
   });
-  count.textContent = String(tasks.length).padStart(2, "0");
+  updateCount();
+}
+
+function updateCount() {
+  const openTasks = tasks.filter((task) => !task.completed);
+  count.textContent = String(openTasks.length).padStart(2, "0");
 }
 
 form.addEventListener("submit", (event) => {
@@ -81,7 +108,7 @@ form.addEventListener("submit", (event) => {
   if (!isTaskValid(text, "")) {
     return;
   }
-  tasks.push(text);
+  tasks.push({ text, completed: false });
   input.value = "";
   input.focus();
   renderTasks();
